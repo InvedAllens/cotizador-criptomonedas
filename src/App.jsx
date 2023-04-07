@@ -1,11 +1,10 @@
 import styled from '@emotion/styled'
 import imagenCriptos from './img/imagen-criptos.png'
 import Formulario from './components/Formulario'
+import { useEffect, useState } from 'react'
+import Resultado from './components/Resultado'
 
-
-function App() {
-
-  const Heading=styled.h1`
+const Heading=styled.h1`
     font-family:'Lato',sans-serif;
     color:#FCFCFC;
     font-size:30px;
@@ -43,6 +42,26 @@ function App() {
     box-shadow:2px 2px 10px 3px #eb455eda;
     padding: 40px;
   `
+
+function App() {
+  const [monedasApp,setMonedasApp]=useState({})
+  const [resultado,setResultado]=useState({})
+  useEffect(()=>{
+    if(Object.keys(monedasApp).length>0){
+      const obtenerCotizacion=async()=>{
+        const {moneda,criptomoneda}=monedasApp
+        const url =`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`
+        const respuesta=await fetch(url)
+        const resultado=await respuesta.json()
+        console.log(resultado.DISPLAY[criptomoneda][moneda])
+        setResultado(resultado.DISPLAY[criptomoneda][moneda])
+      }
+      
+      obtenerCotizacion()
+    
+    }
+  },[monedasApp])
+  
   return (
     <>
     <Contenedor>
@@ -52,7 +71,14 @@ function App() {
       />
       <div>
         <Heading>Cotizador de Criptomonedas</Heading>
-        <Formulario/>
+        <Formulario
+          monedasApp={monedasApp}
+          setMonedasApp={setMonedasApp}
+        />
+        {resultado.PRICE && <Resultado
+          resultado={resultado}
+        /> }
+        
       </div>
     </Contenedor>
     
