@@ -54,7 +54,6 @@ function App() {
         <Heading>Cotizador de Criptomonedas</Heading>
         <Formulario/>
       </div>
-      
     </Contenedor>
     
     </>
