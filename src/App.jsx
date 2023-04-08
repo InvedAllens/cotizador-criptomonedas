@@ -3,6 +3,7 @@ import imagenCriptos from './img/imagen-criptos.png'
 import Formulario from './components/Formulario'
 import { useEffect, useState } from 'react'
 import Resultado from './components/Resultado'
+import Spinner from './components/Spinner'
 
 const Heading=styled.h1`
     font-family:'Lato',sans-serif;
@@ -46,8 +47,11 @@ const Heading=styled.h1`
 function App() {
   const [monedasApp,setMonedasApp]=useState({})
   const [resultado,setResultado]=useState({})
+  const [cargando,setCargando]=useState(false)
   useEffect(()=>{
     if(Object.keys(monedasApp).length>0){
+      setCargando(true)
+      setResultado({})
       const obtenerCotizacion=async()=>{
         const {moneda,criptomoneda}=monedasApp
         const url =`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`
@@ -55,6 +59,7 @@ function App() {
         const resultado=await respuesta.json()
         console.log(resultado.DISPLAY[criptomoneda][moneda])
         setResultado(resultado.DISPLAY[criptomoneda][moneda])
+        setCargando(false)
       }
       
       obtenerCotizacion()
@@ -75,6 +80,7 @@ function App() {
           monedasApp={monedasApp}
           setMonedasApp={setMonedasApp}
         />
+        {cargando && <Spinner/>}
         {resultado.PRICE && <Resultado
           resultado={resultado}
         /> }

@@ -7,15 +7,12 @@ const Contenedor=styled.div`
     align-items: start;
     gap: 1rem;
     margin-top: 30px;
-
-
 `
 const Texto=styled.p`
     font-size: 16px;
     span{
         font-weight: 700;
     }
-
 `
 const Precio=styled.p`
     font-size: 18px;
